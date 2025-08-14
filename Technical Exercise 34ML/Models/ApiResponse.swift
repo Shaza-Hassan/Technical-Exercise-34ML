@@ -13,6 +13,6 @@ struct ApiResponse<T: Codable> : Codable {
 }
 
 struct ApiResponseMeta : Codable {
-    let count: Int
+    let code: Int
     let errors: [String]
 }

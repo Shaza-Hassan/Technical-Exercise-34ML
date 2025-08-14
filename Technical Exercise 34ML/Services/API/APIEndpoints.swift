@@ -15,7 +15,7 @@ enum APIEndpoints {
     
     case recommendedExperiences
     case recentExperiences
-    case searchExperiences(title: String)
+    case searchExperiences(query: String)
     case singleExperience(id: String)
     case likeExperience(id: String)
     

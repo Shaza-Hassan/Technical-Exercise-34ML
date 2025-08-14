@@ -8,6 +8,13 @@
 import SwiftUI
 
 struct ContentView: View {
+    @StateObject var viewModel: HomeViewModel
+    
+    init(viewModel: HomeViewModel) {
+
+        self._viewModel = StateObject(wrappedValue: viewModel)
+    }
+    
     var body: some View {
         VStack {
             Image(systemName: "globe")
@@ -16,9 +23,22 @@ struct ContentView: View {
             Text("Hello, world!")
         }
         .padding()
+        .task {
+            viewModel.fetchRecommendedExperiences()
+            viewModel.fetchRecentExperiences()
+        }
     }
 }
 
 #Preview {
-    ContentView()
+    ContentView(
+        viewModel: HomeViewModel(
+            repo: HomeRepo(
+                recommendedRemoteDataSource: RecommendedRemoteDataSource(),
+                searchExperienceRemoteDataSource: SearchExperienceRemoteDataSource(),
+                recentRemoteDataSource: RecentRemoteDataSource(),
+                likeExperienceRemoteDataSource: LikeExperienceRemoteDataSource()
+            )
+        )
+    )
 }

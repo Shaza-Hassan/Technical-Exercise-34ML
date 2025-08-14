@@ -7,14 +7,9 @@
 
 import Foundation
 
-protocol RecommendedRemoteDataSourceProtocol {
-    func fetchRecommendedExperiences() async throws -> [Experience]
-}
-
 class RecommendedRemoteDataSource: RecommendedRemoteDataSourceProtocol {
     
     private let apiClient: APIService = APIService.shared
-
     
     func fetchRecommendedExperiences() async throws -> [Experience] {
         let recommendedExperiences :  [Experience] = try await apiClient.request(

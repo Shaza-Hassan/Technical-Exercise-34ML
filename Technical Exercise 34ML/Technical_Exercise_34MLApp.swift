@@ -11,7 +11,15 @@ import SwiftUI
 struct Technical_Exercise_34MLApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            let viewModel =  HomeViewModel(
+                repo: HomeRepo(
+                    recommendedRemoteDataSource: RecommendedRemoteDataSource(),
+                    searchExperienceRemoteDataSource: SearchExperienceRemoteDataSource(),
+                    recentRemoteDataSource: RecentRemoteDataSource(),
+                    likeExperienceRemoteDataSource: LikeExperienceRemoteDataSource()
+                )
+            )
+            ContentView(viewModel: viewModel)
         }
     }
 }
