@@ -11,6 +11,11 @@ import Foundation
 class HomeViewModel : ObservableObject {
     private let repo: HomeRepoProtocol
     
+    @Published var screen: ScreenType = .defualtScreen
+    @Published var searchText: String = ""
+    @Published var recommendedExperiences: [Experience] = []
+    @Published var recentExperiences: [Experience] = []
+    
     init(repo: HomeRepoProtocol) {
         self.repo = repo
     }
@@ -19,7 +24,7 @@ class HomeViewModel : ObservableObject {
         Task {
             do {
                 let experiences = try await self.repo.fetchRecommendedExperiences()
-                print("recommend: \(experiences)")
+                self.recommendedExperiences = experiences
             } catch {
                 print(error.localizedDescription)
             }
@@ -30,7 +35,7 @@ class HomeViewModel : ObservableObject {
         Task {
             do {
                 let experiences = try await self.repo.fetchRecentExperiences()
-                print("recent: \(experiences)")
+                recentExperiences = experiences
             } catch {
                 print(error.localizedDescription)
             }

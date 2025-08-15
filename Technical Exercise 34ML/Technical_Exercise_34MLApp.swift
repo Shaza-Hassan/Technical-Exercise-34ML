@@ -19,7 +19,7 @@ struct Technical_Exercise_34MLApp: App {
                     likeExperienceRemoteDataSource: LikeExperienceRemoteDataSource()
                 )
             )
-            ContentView(viewModel: viewModel)
+            HomeScreen(viewModel: viewModel)
         }
     }
 }
