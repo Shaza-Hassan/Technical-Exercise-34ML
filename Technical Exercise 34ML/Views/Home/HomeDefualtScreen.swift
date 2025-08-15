@@ -11,7 +11,7 @@ struct HomeDefualtScreen: View {
     @ObservedObject var viewModel: HomeViewModel
 
     var body: some View {
-        ScrollView(.vertical) {
+        ScrollView(.vertical, showsIndicators: false) {
             VStack(alignment: .leading, spacing: 0){
                 Text("Welcome!")
                     .font(.GothamRounded.bold(22))
@@ -32,7 +32,7 @@ struct HomeDefualtScreen: View {
                 ScrollView(.horizontal, showsIndicators: false){
                     LazyHStack {
                         ForEach(
-                            viewModel.recommendedExperiences
+                            viewModel.recommendedExperiences.value ?? []
                         ) { experience in
                             ExperienceCardView(
                                 isRecommended: true,
@@ -41,6 +41,7 @@ struct HomeDefualtScreen: View {
                             )
                         }
                     }
+                    .frame(minHeight: 181)
                     .padding(.horizontal, 18)
 
                     
@@ -54,7 +55,7 @@ struct HomeDefualtScreen: View {
                 
                 LazyVStack(spacing:12) {
                     ForEach(
-                        viewModel.recentExperiences
+                        viewModel.recentExperiences.value ?? []
                     ) { experience in
                         ExperienceCardView(
                             isRecommended: false,
@@ -62,7 +63,7 @@ struct HomeDefualtScreen: View {
                             fullWidth: true
                         )
                     }
-                }
+                }.padding(.top, 12)
                 .padding(.horizontal, 18)
 
             }

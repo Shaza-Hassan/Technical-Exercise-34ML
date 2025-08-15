@@ -29,6 +29,8 @@ final class APIService {
         request.httpMethod = endpoint.httpMethod
         request.setValue("application/json", forHTTPHeaderField: "Accept")
         
+        print(request)
+        
         let (data, response) = try await session.data(for: request)
         
         guard let httpResponse = response as? HTTPURLResponse else {

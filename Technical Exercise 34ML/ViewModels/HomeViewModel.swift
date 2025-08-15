@@ -13,32 +13,59 @@ class HomeViewModel : ObservableObject {
     
     @Published var screen: ScreenType = .defualtScreen
     @Published var searchText: String = ""
-    @Published var recommendedExperiences: [Experience] = []
-    @Published var recentExperiences: [Experience] = []
+    
+    @Published var recommendedExperiences: UIStateModel<[Experience]> = .idle
+    @Published var recentExperiences: UIStateModel<[Experience]> = .idle
+    @Published var searchResult : UIStateModel<[Experience]> = .idle
     
     init(repo: HomeRepoProtocol) {
         self.repo = repo
     }
     
     func fetchRecommendedExperiences() {
+        recommendedExperiences = .loading
+
         Task {
             do {
-                let experiences = try await self.repo.fetchRecommendedExperiences()
-                self.recommendedExperiences = experiences
+                let experiences = try await repo.fetchRecommendedExperiences()
+                recommendedExperiences = .loaded(experiences)
             } catch {
-                print(error.localizedDescription)
+                recommendedExperiences = .error(error.localizedDescription)
             }
         }
     }
     
     func fetchRecentExperiences() {
+        recentExperiences = .loading
+
         Task {
             do {
-                let experiences = try await self.repo.fetchRecentExperiences()
-                recentExperiences = experiences
+                let experiences = try await repo.fetchRecentExperiences()
+                recentExperiences = .loaded(experiences)
             } catch {
+                recentExperiences = .error(error.localizedDescription)
+            }
+        }
+    }
+    
+    func fetchSearchResult(){
+        self.screen = .searchResult
+        searchResult = .loading
+        Task {
+            do {
+                let experiences = try await repo.fetchSearchExperiences(query: searchText)
+                searchResult = .loaded(experiences)
+                print(experiences)
+            } catch {
+                searchResult = .error(error.localizedDescription)
                 print(error.localizedDescription)
             }
         }
+    }
+    
+    func clearSearch(){
+        self.searchText = ""
+        self.screen = .defualtScreen
+        searchResult = .idle
     }
 }

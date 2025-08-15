@@ -28,20 +28,32 @@ struct TopNavigationView: View {
                             .foregroundColor(.hintColor)
                     }
                     
-                    TextField("", text: $viewModel.searchText)
-                        .textInputAutocapitalization(.never)
-                        .disableAutocorrection(true)
-                        .submitLabel(.search)
-                        .focused($isFocused)
-                        .font(.GothamRounded.book(17))
-                        .onSubmit {
-                            
+                    HStack {
+                        TextField("", text: $viewModel.searchText)
+                            .textInputAutocapitalization(.never)
+                            .disableAutocorrection(true)
+                            .submitLabel(.search)
+                            .focused($isFocused)
+                            .font(.GothamRounded.book(17))
+                            .onSubmit {
+                                viewModel.fetchSearchResult()
+                            }
+                        
+                        if !viewModel.searchText.isEmpty {
+                            Button {
+                                isFocused = false
+                                viewModel.clearSearch()
+                            } label: {
+                                Image(systemName: "xmark.circle.fill")
+                                    .foregroundStyle(.gray)
+                            }
                         }
+                    }
                 }
                 
             }
             .frame(idealHeight: 36, maxHeight: 36)
-            .padding(.leading,14)
+            .padding(.horizontal,14)
             .background(
                 RoundedRectangle(cornerRadius: 10)
                     .fill(.searchBarBackground)

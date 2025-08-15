@@ -22,7 +22,7 @@ struct HomeScreen: View {
             case .defualtScreen:
                 HomeDefualtScreen(viewModel: viewModel)
             case .searchResult:
-                SearchResult()
+                SearchResult(viewModel: viewModel)
             }
             
         }
