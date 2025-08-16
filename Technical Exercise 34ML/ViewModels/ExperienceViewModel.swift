@@ -20,10 +20,10 @@ class ExperienceViewModel: ObservableObject {
     func onLikeButtonCliked() {
         Task {
             do {
-                let likesNo = try await repo.likeExperience(
-                    experienceId: experience.id
+                let experience = try await repo.likeExperience(
+                    experience: experience
                 )
-                self.experience = experience.updateLikesNo(likesNo)
+                self.experience = experience
                 
             } catch {
                 print(error.localizedDescription)

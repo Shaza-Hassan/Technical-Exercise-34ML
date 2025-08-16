@@ -12,7 +12,7 @@ enum AppColor : String {
     case searchBachground = "search-bar-background"
     case hintColor = "hint-color"
     case recommendedBackground = "recommended-background"
-    case orange = "orange"
+    case orange = "orange-color"
     case textGrey = "text-grey"
 }
 

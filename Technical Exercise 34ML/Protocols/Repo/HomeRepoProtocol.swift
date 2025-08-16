@@ -11,5 +11,5 @@ protocol HomeRepoProtocol {
     func fetchRecentExperiences() async throws -> [Experience]
     func fetchRecommendedExperiences() async throws -> [Experience]
     func fetchSearchExperiences(query: String) async throws -> [Experience]
-    func likeExperience(experienceId: String) async throws -> Int
+    func likeExperience(experience: Experience) async throws -> Experience
 }

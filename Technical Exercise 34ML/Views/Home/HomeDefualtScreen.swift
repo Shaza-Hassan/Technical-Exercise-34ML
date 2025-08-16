@@ -95,10 +95,7 @@ struct HomeDefualtScreen: View {
     HomeDefualtScreen(
         viewModel: HomeViewModel(
             repo: HomeRepo(
-                recommendedRemoteDataSource: RecommendedRemoteDataSource(),
-                searchExperienceRemoteDataSource: SearchExperienceRemoteDataSource(),
-                recentRemoteDataSource: RecentRemoteDataSource(),
-                likeExperienceRemoteDataSource: LikeExperienceRemoteDataSource()
+                
             )
         )
     )

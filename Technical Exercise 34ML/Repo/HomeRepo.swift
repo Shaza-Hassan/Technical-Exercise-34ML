@@ -9,36 +9,79 @@ import Foundation
 
 class HomeRepo : HomeRepoProtocol{
     
-    private let recommendedRemoteDataSource : RecommendedRemoteDataSourceProtocol
-    private let searchExperienceRemoteDataSource : SearchExperienceRemoteDataSourceProtocol
-    private let recentRemoteDataSource : RecentRemoteDataSourceProtocol
-    private let likeExperienceRemoteDataSource : LikeExperienceRemoteDataSourceProtocol
+    private let experienceRemoteDataSource : ExperienceRemoteDataSourceProtocol
+    private let experienceLocalDataSource : ExperienceLocalDataSource
     
     init(
-        recommendedRemoteDataSource: RecommendedRemoteDataSourceProtocol,
-        searchExperienceRemoteDataSource : SearchExperienceRemoteDataSourceProtocol,
-        recentRemoteDataSource : RecentRemoteDataSourceProtocol,
-        likeExperienceRemoteDataSource : LikeExperienceRemoteDataSourceProtocol
+        experienceRemoteDataSource: ExperienceRemoteDataSourceProtocol = ExperienceRemoteDataSource(),
+        experienceLocalDataSource: ExperienceLocalDataSource = ExperienceLocalDataSource()
     ) {
-        self.recommendedRemoteDataSource = recommendedRemoteDataSource
-        self.likeExperienceRemoteDataSource = likeExperienceRemoteDataSource
-        self.recentRemoteDataSource = recentRemoteDataSource
-        self.searchExperienceRemoteDataSource = searchExperienceRemoteDataSource
+        self.experienceRemoteDataSource = experienceRemoteDataSource
+        self.experienceLocalDataSource = experienceLocalDataSource
     }
     
-    func fetchRecentExperiences() async throws -> [Experience] {
-        return try await recentRemoteDataSource.fetchRecentExperiences()
+    fileprivate func getLiekdDataFromLocalAndMergeWithRemote(
+        local: [Experience],
+        remote: [Experience]
+    ) -> [Experience]{
+        let merged = remote.map { remoteExp in
+            if let localExp = local.first(where: { $0.id == remoteExp.id }) {
+                var updated = remoteExp
+                
+                if localExp.isLiked == true {
+                    updated = remoteExp.updateIsLiked()
+                }
+                return updated
+            } else {
+                return remoteExp
+            }
+        }
+        experienceLocalDataSource.saveExperiences(merged)
+
+        return merged
     }
     
     func fetchRecommendedExperiences() async throws -> [Experience] {
-        return try await recommendedRemoteDataSource.fetchRecommendedExperiences()
+        do {
+            let remote = try await experienceRemoteDataSource.fetchRecommendedExperiences()
+            let local = experienceLocalDataSource.getRecommendedExperiences()
+            let updatedRemoteData = getLiekdDataFromLocalAndMergeWithRemote(local: local, remote:remote)
+            return updatedRemoteData
+        } catch {
+            return experienceLocalDataSource.getRecommendedExperiences()
+        }
+    }
+    
+    func fetchRecentExperiences() async throws -> [Experience] {
+        do {
+            let remote = try await experienceRemoteDataSource.fetchRecentExperiences()
+            let local = experienceLocalDataSource.getRecentExperiences()
+            let updatedRemoteData = getLiekdDataFromLocalAndMergeWithRemote(local: local, remote:remote)
+            return updatedRemoteData
+        } catch {
+            return experienceLocalDataSource.getRecentExperiences()
+        }
     }
     
     func fetchSearchExperiences(query: String) async throws -> [Experience] {
-        return try await searchExperienceRemoteDataSource.searchExperiences(query: query)
+        do {
+            let remote = try await experienceRemoteDataSource.searchExperiences(query: query)
+            let local = experienceLocalDataSource.searchExperiences(
+                query: query
+            )
+            let updatedRemoteData = getLiekdDataFromLocalAndMergeWithRemote(local: local, remote:remote)
+            return updatedRemoteData
+        } catch {
+            return experienceLocalDataSource.searchExperiences(query: query)
+        }
     }
     
-    func likeExperience(experienceId: String) async throws -> Int {
-        return try await likeExperienceRemoteDataSource.likeExperience(experienceId: experienceId)
+    func likeExperience(experience: Experience) async throws -> Experience {
+        let likesCount = try await experienceRemoteDataSource
+            .likeExperience(experienceId: experience.id)
+        let updatedExperience = experience.updateLikesNo(likesCount)
+        experienceLocalDataSource.saveExperience(updatedExperience)
+        
+        return updatedExperience
     }
 }

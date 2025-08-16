@@ -80,10 +80,7 @@ struct TopNavigationView: View {
     TopNavigationView(
         viewModel: HomeViewModel(
             repo: HomeRepo(
-                recommendedRemoteDataSource: RecommendedRemoteDataSource(),
-                searchExperienceRemoteDataSource: SearchExperienceRemoteDataSource(),
-                recentRemoteDataSource: RecentRemoteDataSource(),
-                likeExperienceRemoteDataSource: LikeExperienceRemoteDataSource()
+                
             )
         )
     )

@@ -39,10 +39,12 @@ struct HomeScreen: View {
                 ExperienceScreen(
                     viewModel: ExperienceViewModel(
                         experience: item,
-                        repo: ExperienceRepo(
-                            likeExperienceRemoteDataSource: LikeExperienceRemoteDataSource()
-                        )
-                    )
+                        repo: ExperienceRepo()
+                    ),
+                    onUpdate: {
+                        experience in
+                        viewModel.updateExperienceInList(exp: experience)
+                    }
                 )
             })
     }
@@ -50,11 +52,6 @@ struct HomeScreen: View {
 
 #Preview {
     HomeScreen(viewModel: HomeViewModel(
-        repo: HomeRepo(
-            recommendedRemoteDataSource: RecommendedRemoteDataSource(),
-            searchExperienceRemoteDataSource: SearchExperienceRemoteDataSource(),
-            recentRemoteDataSource: RecentRemoteDataSource(),
-            likeExperienceRemoteDataSource: LikeExperienceRemoteDataSource()
-        )
+        repo: HomeRepo()
     ))
 }
