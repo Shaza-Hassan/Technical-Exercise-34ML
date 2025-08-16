@@ -9,7 +9,7 @@ import SwiftUI
 
 struct HomeScreen: View {
     @StateObject var viewModel: HomeViewModel
-
+    
     init(viewModel: HomeViewModel) {
         self._viewModel = StateObject(wrappedValue: viewModel)
     }
@@ -33,6 +33,18 @@ struct HomeScreen: View {
             maxHeight: .infinity,
             alignment: .top
         )
+        .sheet(
+            item: $viewModel.selectedItem,
+            content: { item in
+                ExperienceScreen(
+                    viewModel: ExperienceViewModel(
+                        experience: item,
+                        repo: ExperienceRepo(
+                            likeExperienceRemoteDataSource: LikeExperienceRemoteDataSource()
+                        )
+                    )
+                )
+            })
     }
 }
 

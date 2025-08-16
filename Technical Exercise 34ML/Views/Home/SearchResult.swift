@@ -11,18 +11,35 @@ struct SearchResult: View {
     
     @ObservedObject var viewModel: HomeViewModel
     var body: some View {
-        switch viewModel.searchResult {
-        case .idle:
-            EmptyView()
-        case .loading:
-            ProgressView()
-        case .loaded(let t):
-            handleSearchResultView(result: t)
-        case .error(let string):
-            Text(string)
-                .font(.GothamRounded.bold(22))
-                .foregroundColor(.red)
-        }
+        VStack {
+            
+            switch viewModel.searchResult {
+            case .idle:
+                EmptyView()
+            case .loading:
+                ProgressView()
+                
+                
+            case .loaded(let t):
+                if t.isEmpty {
+                    Text("No Result Found")
+                        .font(.GothamRounded.bold(22))
+                        .foregroundColor(.red)
+                } else {
+                    handleSearchResultView(result: t)
+                }
+            case .error(let string):
+                Text(string)
+                    .font(.GothamRounded.bold(22))
+                    .foregroundColor(.red)
+            }
+        }.frame(
+            idealWidth: .infinity,
+            maxWidth: .infinity,
+            idealHeight: .infinity,
+            maxHeight: .infinity,
+            alignment: .center
+        )
     }
     
     
@@ -30,17 +47,22 @@ struct SearchResult: View {
         ScrollView(.vertical,showsIndicators: false){
             LazyVStack {
                 ForEach(result){
-                    experince in
+                    experience in
                     ExperienceCardView(
-                        isRecommended: false,
-                        experience: experince,
-                        fullWidth: true
+                        experience: experience,
+                        fullWidth: true,
+                        onLike: {
+                            viewModel.likeExperience(exp: experience)
+                        }
                     )
+                    .onTapGesture {
+                        viewModel.selectedItem = experience
+                    }
                 }
             }
             .padding(.horizontal, 18)
             .padding(.top,24)
-
+            
         }
     }
 }

@@ -12,6 +12,8 @@ enum AppColor : String {
     case searchBachground = "search-bar-background"
     case hintColor = "hint-color"
     case recommendedBackground = "recommended-background"
+    case orange = "orange"
+    case textGrey = "text-grey"
 }
 
 extension Color {
@@ -25,5 +27,13 @@ extension Color {
     
     static var recommendBackground : Color {
         Color(AppColor.recommendedBackground.rawValue)
+    }
+    
+    static var orange : Color {
+        Color(AppColor.orange.rawValue)
+    }
+    
+    static var textGreyColor: Color {
+        Color(AppColor.textGrey.rawValue)
     }
 }

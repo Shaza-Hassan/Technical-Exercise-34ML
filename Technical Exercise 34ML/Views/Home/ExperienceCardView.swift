@@ -8,13 +8,12 @@
 import SwiftUI
 
 struct ExperienceCardView: View {
-    let isRecommended : Bool
     let experience : Experience
     let fullWidth: Bool
     @State private var imageLoaded : Bool = false
     let screenWidth = UIScreen.main.bounds.width
     private let screenRation = 0.91
-    
+    let onLike: () -> Void
     var body: some View {
         VStack(spacing:10) {
             coverImage()
@@ -26,11 +25,16 @@ struct ExperienceCardView: View {
                 Spacer()
                 Text("\(experience.likesNo)")
                     .font(.GothamRounded.medium(14))
-                Image(
-                    experience.isLiked == true ?
-                    AppImages.filledHeart.rawValue :
-                        AppImages.emptyHeart.rawValue
-                )
+                
+                Button(action: {
+                    onLike()
+                }) {
+                    Image(
+                        experience.isLiked == true ?
+                        AppImages.filledHeart.rawValue :
+                            AppImages.emptyHeart.rawValue
+                    )
+                }.disabled(experience.isLiked == true)
                 
             }
             .padding(.leading, 3)
@@ -87,7 +91,7 @@ struct ExperienceCardView: View {
     
     fileprivate func topInfoInCard() -> some View {
         return HStack{
-            if isRecommended {
+            if experience.recommended == 1 {
                 Label(
                     "RECOMMENDED",
                     image: AppImages.recommended.rawValue
@@ -124,13 +128,11 @@ struct ExperienceCardView: View {
 #Preview {
     VStack{
         ExperienceCardView(
-            isRecommended: true,
-            experience: dummyExperience, fullWidth: false
+            experience: dummyExperience, fullWidth: false, onLike: {}
         )
         
         ExperienceCardView(
-            isRecommended: false,
-            experience: dummyExperience, fullWidth: true
+            experience: dummyExperience, fullWidth: true,onLike: {}
         )
     }
     .padding()

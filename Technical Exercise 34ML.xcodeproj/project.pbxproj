@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		C689FB512E509246007E81B4 /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = C689FB502E509246007E81B4 /* RealmSwift */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		C66D90882E4E5C0B0042268B /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -52,6 +56,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C689FB512E509246007E81B4 /* RealmSwift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -112,6 +117,7 @@
 			);
 			name = "Technical Exercise 34ML";
 			packageProductDependencies = (
+				C689FB502E509246007E81B4 /* RealmSwift */,
 			);
 			productName = "Technical Exercise 34ML";
 			productReference = C66D907A2E4E5C0A0042268B /* Technical Exercise 34ML.app */;
@@ -195,6 +201,9 @@
 			);
 			mainGroup = C66D90712E4E5C0A0042268B;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				C689FB4D2E509246007E81B4 /* XCRemoteSwiftPackageReference "realm-swift" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = C66D907B2E4E5C0A0042268B /* Products */;
 			projectDirPath = "";
@@ -566,6 +575,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		C689FB4D2E509246007E81B4 /* XCRemoteSwiftPackageReference "realm-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/realm/realm-swift.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 20.0.3;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		C689FB502E509246007E81B4 /* RealmSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C689FB4D2E509246007E81B4 /* XCRemoteSwiftPackageReference "realm-swift" */;
+			productName = RealmSwift;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = C66D90722E4E5C0A0042268B /* Project object */;
 }

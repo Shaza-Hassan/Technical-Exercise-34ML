@@ -18,6 +18,7 @@ class HomeViewModel : ObservableObject {
     @Published var recentExperiences: UIStateModel<[Experience]> = .idle
     @Published var searchResult : UIStateModel<[Experience]> = .idle
     
+    @Published var selectedItem: Experience? = nil
     init(repo: HomeRepoProtocol) {
         self.repo = repo
     }
@@ -58,9 +59,50 @@ class HomeViewModel : ObservableObject {
                 print(experiences)
             } catch {
                 searchResult = .error(error.localizedDescription)
+            }
+        }
+    }
+    
+    func likeExperience(exp: Experience){
+        Task {
+            do {
+                let likeCounts = try await repo.likeExperience(experienceId: exp.id)
+                let newExp = exp.updateLikesNo(likeCounts)
+                updateExperienceInList(exp: newExp)
+            } catch {
                 print(error.localizedDescription)
             }
         }
+    }
+    
+    func updateExperienceInList(exp: Experience){
+        switch screen {
+        case .defualtScreen:
+            if exp.recommended == 1 {
+                guard let expIndex = self.recommendedExperiences.value?.firstIndex(where: {$0 == exp}) else {
+                    return
+                }
+                var exps = self.recommendedExperiences.value
+                exps?[expIndex] = exp
+                self.recommendedExperiences = .loaded(exps ?? [])
+            } else {
+                guard let expIndex = self.recentExperiences.value?.firstIndex(where: {$0 == exp}) else {
+                    return
+                }
+                var exps = self.recentExperiences.value
+                exps?[expIndex] = exp
+                self.recentExperiences = .loaded(exps ?? [])
+            }
+        case .searchResult:
+            guard let expIndex = self.searchResult.value?.firstIndex(where: {$0 == exp}) else {
+                return
+            }
+            var exps = self.searchResult.value
+            exps?[expIndex] = exp
+            self.searchResult = .loaded(exps ?? [])
+        }
+        
+        
     }
     
     func clearSearch(){

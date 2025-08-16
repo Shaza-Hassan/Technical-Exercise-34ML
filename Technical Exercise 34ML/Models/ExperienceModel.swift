@@ -9,7 +9,7 @@ import Foundation
 
 import Foundation
 
-struct Experience: Codable, Identifiable {
+struct Experience: Codable, Identifiable, Equatable {
     let id: String
     let title: String
     let coverPhoto: String
@@ -18,6 +18,26 @@ struct Experience: Codable, Identifiable {
     let likesNo: Int
     let city: City
     let isLiked: Bool?
+    let recommended: Int
+    
+    func updateLikesNo(_ newLikesNo: Int) -> Experience {
+        let updatedSelf = Experience(
+            id: id,
+            title: title,
+            coverPhoto: coverPhoto,
+            description: description,
+            viewsNo: viewsNo,
+            likesNo: newLikesNo,
+            city: city,
+            isLiked: true,
+            recommended: recommended
+        )
+        return updatedSelf
+    }
+    
+    static func == (lhs: Experience, rhs: Experience) -> Bool {
+        return lhs.id == rhs.id
+    }
 }
 
 struct City: Codable, Identifiable {
@@ -41,5 +61,5 @@ let dummyExperience = Experience(
         disable: nil,
         topPick: 0
     ),
-    isLiked: nil
+    isLiked: nil, recommended: 1
     )

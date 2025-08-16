@@ -35,10 +35,15 @@ struct HomeDefualtScreen: View {
                             viewModel.recommendedExperiences.value ?? []
                         ) { experience in
                             ExperienceCardView(
-                                isRecommended: true,
                                 experience: experience,
-                                fullWidth: false
+                                fullWidth: false,
+                                onLike: {
+                                    viewModel.likeExperience(exp: experience)
+                                }
                             )
+                            .onTapGesture{
+                                viewModel.selectedItem = experience
+                            }
                         }
                     }
                     .frame(minHeight: 181)
@@ -58,10 +63,14 @@ struct HomeDefualtScreen: View {
                         viewModel.recentExperiences.value ?? []
                     ) { experience in
                         ExperienceCardView(
-                            isRecommended: false,
                             experience: experience,
-                            fullWidth: true
-                        )
+                            fullWidth: true,
+                            onLike: {
+                                viewModel.likeExperience(exp: experience)
+                            }
+                        ).onTapGesture {
+                            viewModel.selectedItem = experience
+                        }
                     }
                 }.padding(.top, 12)
                 .padding(.horizontal, 18)
