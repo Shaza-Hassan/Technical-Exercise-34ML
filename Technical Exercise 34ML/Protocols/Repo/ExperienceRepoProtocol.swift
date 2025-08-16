@@ -8,5 +8,5 @@
 import Foundation
 
 protocol ExperienceRepoProtocol {
-    func likeExperience(experienceId: String) async throws -> Int
+    func likeExperience(experience: Experience) async throws -> Experience
 }

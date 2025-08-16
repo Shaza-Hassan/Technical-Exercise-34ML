@@ -13,10 +13,7 @@ struct Technical_Exercise_34MLApp: App {
         WindowGroup {
             let viewModel =  HomeViewModel(
                 repo: HomeRepo(
-                    recommendedRemoteDataSource: RecommendedRemoteDataSource(),
-                    searchExperienceRemoteDataSource: SearchExperienceRemoteDataSource(),
-                    recentRemoteDataSource: RecentRemoteDataSource(),
-                    likeExperienceRemoteDataSource: LikeExperienceRemoteDataSource()
+                    
                 )
             )
             HomeScreen(viewModel: viewModel)

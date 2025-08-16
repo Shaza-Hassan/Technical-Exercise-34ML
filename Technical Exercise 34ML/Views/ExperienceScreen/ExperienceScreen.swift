@@ -11,6 +11,7 @@ struct ExperienceScreen: View {
     @StateObject var viewModel: ExperienceViewModel
     @State private var imageLoaded : Bool = false
     let screenWidth = UIScreen.main.bounds.width
+    var onUpdate : ((Experience) -> Void)?
 
     var body: some View {
         ScrollView(.vertical, showsIndicators: false){
@@ -28,6 +29,8 @@ struct ExperienceScreen: View {
                 
             }
             
+        }.onDisappear {
+            onUpdate?(viewModel.experience)
         }
     }
     
@@ -139,9 +142,7 @@ struct ExperienceScreen: View {
     ExperienceScreen(
         viewModel: ExperienceViewModel(
             experience: dummyExperience,
-            repo: ExperienceRepo(
-                likeExperienceRemoteDataSource: LikeExperienceRemoteDataSource()
-            )
+            repo: ExperienceRepo()
         )
         
     )

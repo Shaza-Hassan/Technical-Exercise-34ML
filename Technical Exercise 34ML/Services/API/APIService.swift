@@ -7,7 +7,7 @@
 
 import Foundation
 
-final class APIService {
+final class APIService : APIServicesProtocal {
     
     static let shared = APIService()
     private init() {}
@@ -28,9 +28,7 @@ final class APIService {
         var request = URLRequest(url: url)
         request.httpMethod = endpoint.httpMethod
         request.setValue("application/json", forHTTPHeaderField: "Accept")
-        
-        print(request)
-        
+                
         let (data, response) = try await session.data(for: request)
         
         guard let httpResponse = response as? HTTPURLResponse else {

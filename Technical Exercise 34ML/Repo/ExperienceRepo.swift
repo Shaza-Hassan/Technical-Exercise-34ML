@@ -8,15 +8,23 @@
 import Foundation
 
 class ExperienceRepo : ExperienceRepoProtocol {
-    private let likeExperienceRemoteDataSource : LikeExperienceRemoteDataSourceProtocol
+    private let experienceRemoteDataSource : ExperienceRemoteDataSource
+    private let experienceLocalDataSource : ExperienceLocalDataSource
 
     init(
-        likeExperienceRemoteDataSource: LikeExperienceRemoteDataSourceProtocol
+        experienceRemoteDataSource : ExperienceRemoteDataSource = ExperienceRemoteDataSource(),
+        experienceLocalDataSource : ExperienceLocalDataSource = ExperienceLocalDataSource()
     ) {
-        self.likeExperienceRemoteDataSource = likeExperienceRemoteDataSource
+        self.experienceRemoteDataSource = experienceRemoteDataSource
+        self.experienceLocalDataSource = experienceLocalDataSource
     }
-    func likeExperience(experienceId: String) async throws -> Int {
-        return try await likeExperienceRemoteDataSource.likeExperience(experienceId: experienceId)
+    
+    func likeExperience(experience: Experience) async throws -> Experience {
+        let likesCount = try await experienceRemoteDataSource
+            .likeExperience(experienceId: experience.id)
+        let updatedExperience = experience.updateLikesNo(likesCount)
+        experienceLocalDataSource.saveExperience(updatedExperience)
+        return updatedExperience
     }
 
     

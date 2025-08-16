@@ -35,6 +35,21 @@ struct Experience: Codable, Identifiable, Equatable {
         return updatedSelf
     }
     
+    func updateIsLiked() -> Experience {
+        let updatedSelf = Experience(
+            id: id,
+            title: title,
+            coverPhoto: coverPhoto,
+            description: description,
+            viewsNo: viewsNo,
+            likesNo: likesNo,
+            city: city,
+            isLiked: true,
+            recommended: recommended
+        )
+        return updatedSelf
+    }
+    
     static func == (lhs: Experience, rhs: Experience) -> Bool {
         return lhs.id == rhs.id
     }

@@ -66,8 +66,7 @@ class HomeViewModel : ObservableObject {
     func likeExperience(exp: Experience){
         Task {
             do {
-                let likeCounts = try await repo.likeExperience(experienceId: exp.id)
-                let newExp = exp.updateLikesNo(likeCounts)
+                let newExp = try await repo.likeExperience(experience: exp)
                 updateExperienceInList(exp: newExp)
             } catch {
                 print(error.localizedDescription)
